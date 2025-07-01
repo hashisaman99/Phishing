@@ -1,7 +1,8 @@
 import requests
 
 # Replace this with your actual FastAPI server URL and port
-url = "http://localhost:8000/predict"
+url = "https://phishing-x8ra.onrender.com/predict"
+
 
 # Example suspicious email
 email_text = {
