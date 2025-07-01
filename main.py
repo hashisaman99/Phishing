@@ -2,16 +2,15 @@ from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
-from fastapi.middleware.cors import CORSMiddleware
+import os
 
 
 # Load tokenizer and model from HuggingFace
 tokenizer = AutoTokenizer.from_pretrained("cybersectony/phishing-email-detection-distilbert_v2.4.1")
 model = AutoModelForSequenceClassification.from_pretrained("cybersectony/phishing-email-detection-distilbert_v2.4.1")
 
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # You can restrict this to specific domains later
@@ -50,3 +49,10 @@ def predict_email(request: EmailRequest):
         "confidence": max_label[1],
         "all_probabilities": labels
     }
+
+if __name__ == "__main__":
+    import os
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+
